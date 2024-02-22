@@ -1,14 +1,38 @@
-# Import OpenCV module  
-import cv2  
-# Import pyplot from matplotlib as pltd  
-from matplotlib import pyplot as pltd  
-# Opening the image from files  
-imaging = cv2.imread("C:\\Users\\DevAppSys Office\\Pictures\\Camera Roll\\ss.png")  
-# Altering properties of image with cv2  
-img_gray = cv2.cvtColor(imaging, cv2.COLOR_BGR2GRAY)  
-imaging_rgb = cv2.cvtColor(imaging, cv2.COLOR_BGR2RGB)  
-# Plotting image with subplot() from plt  
-pltd.subplot(1, 1, 1)  
-# Displaying image in the output  
-pltd.imshow(imaging_rgb)  
-pltd.show()  
+import cv2
+from matplotlib import pyplot as plt
+
+# Opening image
+img = cv2.imread("C:\\Users\\91895\\Pictures\\Saved Pictures\\nature.jpg")
+
+# OpenCV opens images as BGR 
+# but we want it as RGB. We'll 
+# also need a grayscale version
+img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+# Use minSize because for not 
+# bothering with extra-small 
+# dots that would look like STOP signs
+stop_data = cv2.CascadeClassifier('D:\riwan')
+
+found = stop_data.detectMultiScale(img_gray, minSize=(20, 20))
+
+# Don't do anything if there's 
+# no sign
+amount_found = len(found)
+
+if amount_found != 0:
+    # There may be more than one
+    # sign in the image
+    for (x, y, width, height) in found:
+        # We draw a green rectangle around
+        # every recognized sign
+        cv2.rectangle(img_rgb, (x, y), 
+                      (x + width, y + height), 
+                      (0, 255, 0), 5)
+
+# Creates the environment of 
+# the picture and shows it
+plt.subplot(1, 1, 1)
+plt.imshow(img_rgb)
+plt.show()
